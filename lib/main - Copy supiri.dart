@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9FE),
       body: Center(
-        child: SvgPicture.asset('assets/Images/splash.svg',
+        child: SvgPicture.asset('assets/splash.svg',
           width: screenSize.width * 3,  // 100% of the screen width
           height: screenSize.height * 2, // 100% of the screen height
         ),
@@ -79,7 +79,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   String _output = '';
   String _operationSequence = '';
-  String _previousSequence = '';
   bool _isNewNumber = true;
   bool _hasError = false;
   bool _isResultDisplayed = false;
@@ -131,7 +130,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       }
       try {
         final result = _evaluateExpression(_operationSequence);
-        _previousSequence = _operationSequence;
         _output = result;
         _isResultDisplayed = true;
       } catch (e) {
@@ -160,7 +158,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     setState(() {
       _output = '';
       _operationSequence = '';
-      _previousSequence = '';
       _isNewNumber = true;
       _hasError = false;
       _isResultDisplayed = false;
@@ -169,15 +166,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void _onBackspacePressed() {
     setState(() {
-      if (_isResultDisplayed) {
-        if (_output.isNotEmpty) {
-          _output = _output.substring(0, _output.length - 1);
-        }
-        if (_output.isEmpty) {
-          _previousSequence = '';
-          _isResultDisplayed = false;
-        }
-      } else if (_operationSequence.isNotEmpty) {
+      if (_operationSequence.isNotEmpty) {
         _operationSequence = _operationSequence.substring(0, _operationSequence.length - 1);
         _output = _operationSequence;
       }
@@ -294,7 +283,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     bottom: MediaQuery.of(context).size.height * 0.01,
                   ),
                   child: SvgPicture.asset(
-                    'assets/Images/logo.svg',  // Replace with your SVG path
+                    'assets/logo.svg',  // Replace with your SVG path
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
                 ),
@@ -307,14 +296,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        _previousSequence,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF494949),  // Dark gray for numbers
-                        ),
-                      ),
                       Text(
                         _output,
                         style: TextStyle(

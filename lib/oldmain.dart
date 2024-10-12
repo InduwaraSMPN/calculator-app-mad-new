@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
-import 'package:expressions/expressions.dart';
 
 void main() {
   runApp(const CalculatorApp());
@@ -47,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9FE),
       body: Center(
-        child: SvgPicture.asset('assets/Images/splash.svg',
+        child: SvgPicture.asset('assets/splash.svg',
           width: screenSize.width * 3,  // 100% of the screen width
           height: screenSize.height * 2, // 100% of the screen height
         ),
@@ -74,143 +73,90 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   static const Color operatorTextColor = Color(0xFF55A1FF); // Blue for operators
   static const Color backspaceTextColor = Color(0xFFFA5E4A); // Pink for ⌫
   static const Color acTextColor = Color(0xFFFF7EA8); // Orange for DEL
-  static const Color resultColor = Color(0xFF00FF00); // Green for result
-  static const Color errorColor = Color(0xFFFF0000); // Red for error
 
   String _output = '';
-  String _operationSequence = '';
-  String _previousSequence = '';
+  String _currentNumber = '';
+  double _firstNumber = 0;
+  String _operation = '';
   bool _isNewNumber = true;
-  bool _hasError = false;
-  bool _isResultDisplayed = false;
 
   void _onNumberPressed(String number) {
     setState(() {
-      if (_hasError || _isResultDisplayed) {
-        _output = '';
-        _operationSequence = '';
-        _isNewNumber = true;
-        _hasError = false;
-        _isResultDisplayed = false;
-      }
       if (_isNewNumber) {
-        _operationSequence += number;
+        _currentNumber = number;
         _isNewNumber = false;
       } else {
-        _operationSequence += number;
+        _currentNumber += number;
       }
-      _output = _operationSequence;
+      _output = _currentNumber;
     });
   }
 
   void _onOperationPressed(String operation) {
     setState(() {
-      if (_hasError) {
-        return;
-      }
-      if (_isResultDisplayed) {
-        _operationSequence = _output;
-        _isResultDisplayed = false;
-      }
-      if (_operationSequence.isNotEmpty && !_isNewNumber) {
-        final lastChar = _operationSequence[_operationSequence.length - 1];
-        if ('+-×÷'.contains(lastChar)) {
-          _operationSequence = _operationSequence.substring(0, _operationSequence.length - 1);
-        }
-        _operationSequence += ' ' + operation + ' ';
-        _isNewNumber = true;
-      }
-      _output = _operationSequence;
+      _firstNumber = double.parse(_currentNumber);
+      _operation = operation;
+      _isNewNumber = true;
     });
   }
 
   void _onEqualsPressed() {
     setState(() {
-      if (_hasError || _operationSequence.isEmpty) {
-        return;
+      double secondNumber = double.parse(_currentNumber);
+      switch (_operation) {
+        case '+':
+          _currentNumber = (_firstNumber + secondNumber).toString();
+          break;
+        case '-':
+          _currentNumber = (_firstNumber - secondNumber).toString();
+          break;
+        case '×':
+          _currentNumber = (_firstNumber * secondNumber).toString();
+          break;
+        case '÷':
+          _currentNumber = (_firstNumber / secondNumber).toString();
+          break;
       }
-      try {
-        final result = _evaluateExpression(_operationSequence);
-        _previousSequence = _operationSequence;
-        _output = result;
-        _isResultDisplayed = true;
-      } catch (e) {
-        _output = 'Error';
-        _hasError = true;
-      }
+      _output = _currentNumber;
+      _isNewNumber = true;
     });
-  }
-
-  String _evaluateExpression(String expression) {
-    try {
-      final exp = expression.replaceAll('×', '*').replaceAll('÷', '/');
-      final parsedExpression = Expression.parse(exp);
-      final evaluator = const ExpressionEvaluator();
-      final result = evaluator.eval(parsedExpression, {});
-      if (result == double.infinity || result == double.negativeInfinity) {
-        throw Exception('Division by zero');
-      }
-      return result % 1 == 0 ? result.toInt().toString() : result.toString();
-    } catch (e) {
-      throw Exception('Invalid expression');
-    }
   }
 
   void _onClearPressed() {
     setState(() {
       _output = '';
-      _operationSequence = '';
-      _previousSequence = '';
+      _currentNumber = '';
+      _firstNumber = 0;
+      _operation = '';
       _isNewNumber = true;
-      _hasError = false;
-      _isResultDisplayed = false;
     });
   }
 
   void _onBackspacePressed() {
     setState(() {
-      if (_isResultDisplayed) {
-        if (_output.isNotEmpty) {
-          _output = _output.substring(0, _output.length - 1);
-        }
-        if (_output.isEmpty) {
-          _previousSequence = '';
-          _isResultDisplayed = false;
-        }
-      } else if (_operationSequence.isNotEmpty) {
-        _operationSequence = _operationSequence.substring(0, _operationSequence.length - 1);
-        _output = _operationSequence;
+      if (_currentNumber.isNotEmpty) {
+        _currentNumber = _currentNumber.substring(0, _currentNumber.length - 1);
+        _output = _currentNumber;
       }
     });
   }
 
   void _onToggleSignPressed() {
     setState(() {
-      if (_operationSequence.isNotEmpty) {
-        if (_operationSequence.endsWith(' ')) {
-          return;
-        }
-        final lastNumber = _operationSequence.split(' ').last;
-        if (lastNumber.startsWith('-')) {
-          _operationSequence = _operationSequence.substring(0, _operationSequence.length - lastNumber.length) + lastNumber.substring(1);
-        } else {
-          _operationSequence = _operationSequence.substring(0, _operationSequence.length - lastNumber.length) + '-' + lastNumber;
-        }
-        _output = _operationSequence;
+      if (_currentNumber.isNotEmpty) {
+        _currentNumber.startsWith('-')
+            ? _currentNumber = _currentNumber.substring(1)
+            : _currentNumber = '-$_currentNumber';
+        _output = _currentNumber;
       }
     });
   }
 
   void _onPercentagePressed() {
     setState(() {
-      if (_operationSequence.isNotEmpty) {
-        if (_operationSequence.endsWith(' ')) {
-          return;
-        }
-        final lastNumber = _operationSequence.split(' ').last;
-        final percentage = (double.parse(lastNumber) / 100).toString();
-        _operationSequence = _operationSequence.substring(0, _operationSequence.length - lastNumber.length) + percentage;
-        _output = _operationSequence;
+      if (_currentNumber.isNotEmpty) {
+        _currentNumber = (double.parse(_currentNumber) / 100).toString();
+        _output = _currentNumber;
       }
     });
   }
@@ -294,7 +240,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     bottom: MediaQuery.of(context).size.height * 0.01,
                   ),
                   child: SvgPicture.asset(
-                    'assets/Images/logo.svg',  // Replace with your SVG path
+                    'assets/logo.svg',  // Replace with your SVG path
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
                 ),
@@ -308,19 +254,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        _previousSequence,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF494949),  // Dark gray for numbers
-                        ),
-                      ),
-                      Text(
                         _output,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.w600,
-                          color: _hasError ? errorColor : (_isResultDisplayed ? resultColor : Color(0xFF494949)),  // Red for error, green for result, dark gray for numbers
+                          color: Color(0xFF494949),  // Dark gray for numbers
                         ),
                       ),
                     ],
@@ -361,7 +299,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         _buildButton('6'),
                         _buildButton('-',
                             backgroundColor: operatorButtonColor,
-                            textColor: operatorTextColor),
+                            textColor:
+
+ operatorTextColor),
                       ],
                     ),
                     Row(
