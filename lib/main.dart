@@ -63,14 +63,16 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  // Colors extracted from the image
+  // Colors for different buttons
   static const Color numberButtonColor = Color(0xFFF5F6FA); // Light gray
   static const Color operatorButtonColor = Color(0xFFEDF6FF); // Light blue
-  static const Color deleteButtonColor = Color(0xFFFFEEF3); // Light pink
+  static const Color deleteButtonColor = Color(0xFFF5F6FA); // Light pink (for ⌫)
+  static const Color delButtonColor = Color(0xFFFFEEF3); // Light yellow (for DEL)
   static const Color equalsButtonColor = Color(0xFF55A1FF); // Bright blue
   static const Color textColor = Color(0xFF494949); // Dark gray for numbers
   static const Color operatorTextColor = Color(0xFF55A1FF); // Blue for operators
-  static const Color deleteTextColor = Color(0xFFFF7EA8); // Pink for delete
+  static const Color deleteTextColor = Color(0xFFFA5E4A); // Pink for ⌫
+  static const Color delTextColor = Color(0xFFFF7EA8); // Orange for DEL
 
   String _output = '';
   String _currentNumber = '';
@@ -182,13 +184,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           child: MaterialButton(
             padding: const EdgeInsets.all(20),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(12),
             ),
             onPressed: () {
               if (text == 'C') {
                 _onClearPressed();
               } else if (text == '⌫') {
                 _onBackspacePressed();
+              } else if (text == 'DEL') {
+                _onClearPressed();
               } else if (text == '+/-') {
                 _onToggleSignPressed();
               } else if (text == '%') {
@@ -295,7 +299,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         _buildButton('6'),
                         _buildButton('-',
                             backgroundColor: operatorButtonColor,
-                            textColor: operatorTextColor),
+                            textColor:
+
+ operatorTextColor),
                       ],
                     ),
                     Row(
@@ -312,9 +318,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       children: [
                         _buildButton('.'),
                         _buildButton('0'),
-                        _buildButton('C',
-                            backgroundColor: deleteButtonColor,
-                            textColor: deleteTextColor),
+                        _buildButton('DEL',
+                            backgroundColor: delButtonColor,
+                            textColor: delTextColor),
                         _buildButton('=',
                             backgroundColor: equalsButtonColor,
                             textColor: Colors.white),
