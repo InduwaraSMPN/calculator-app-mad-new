@@ -48,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final screenWidth = constraints.maxWidth;
-            final screenHeight = constraints.maxHeight;
             final svgSize = screenWidth < 600 ? screenWidth * 1 : screenWidth * 1;
 
             return SvgPicture.asset(
@@ -71,18 +70,20 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  // Colors for different buttons
-  static const Color numberButtonColor = Color(0xFFF5F6FA); // Light gray
-  static const Color operatorButtonColor = Color(0xFFEDF6FF); // Light blue
-  static const Color backspaceButtonColor = Color(0xFFF5F6FA); // Light pink (for ⌫)
-  static const Color acButtonColor = Color(0xFFFFEEF3); // Light yellow (for DEL)
-  static const Color equalsButtonColor = Color(0xFF55A1FF); // Bright blue
-  static const Color textColor = Color(0xFF494949); // Dark gray for numbers
-  static const Color operatorTextColor = Color(0xFF55A1FF); // Blue for operators
-  static const Color backspaceTextColor = Color(0xFFFA5E4A); // Pink for ⌫
-  static const Color acTextColor = Color(0xFFFF7EA8); // Orange for DEL
-  static const Color resultColor = Color(0xFF00FF00); // Green for result
-  static const Color errorColor = Color(0xFFFF0000); // Red for error
+
+  // Colors for buttons
+  static const Color numberButtonColor = Color(0xFFeff0f6); // 0-9 , . , ⌫ , % . +/-
+  static const Color operatorButtonColor = Color(0xffe7f6ff); // + , - , x , /
+  static const Color acButtonColor = Color(0xFFffd2e8); // AC
+  static const Color equalsButtonColor = Color(0xFF89d9ff); // =
+
+  //Colors for Text
+  static const Color textColor = Color(0xFF2b2933); // for 0-9 , . , % . +/-
+  static const Color operatorTextColor = Color(0xFF2e4f64); // for + , - , x , /
+  static const Color acTextColor = Color(0xFF792b53); // AC
+  static const Color backspaceTextColor = Color(0xFFf52c58); //for ⌫
+  static const Color errorColor = Color(0xFFf52c58); // Error
+  static const Color resultColor = Color(0xFFbaeaa0); // Result
 
   String _output = '';
   String _operationSequence = '';
@@ -124,7 +125,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         if ('+-×÷'.contains(lastChar)) {
           _operationSequence = _operationSequence.substring(0, _operationSequence.length - 1);
         }
-        _operationSequence += ' ' + operation + ' ';
+        _operationSequence += ' $operation ';
         _isNewNumber = true;
       }
       _output = _operationSequence;
@@ -201,7 +202,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         if (lastNumber.startsWith('-')) {
           _operationSequence = _operationSequence.substring(0, _operationSequence.length - lastNumber.length) + lastNumber.substring(1);
         } else {
-          _operationSequence = _operationSequence.substring(0, _operationSequence.length - lastNumber.length) + '-' + lastNumber;
+          _operationSequence = '${_operationSequence.substring(0, _operationSequence.length - lastNumber.length)}-$lastNumber';
         }
         _output = _operationSequence;
       }
@@ -344,7 +345,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         _buildButton('+/-'),
                         _buildButton('%'),
                         _buildButton('⌫',
-                            backgroundColor: backspaceButtonColor,
+                            backgroundColor: numberButtonColor,
                             textColor: backspaceTextColor),
                         _buildButton('÷',
                             backgroundColor: operatorButtonColor,
