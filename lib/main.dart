@@ -42,14 +42,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9FE),
       body: Center(
-        child: SvgPicture.asset('assets/Images/splash.svg',
-          width: screenSize.width * 3,  // 100% of the screen width
-          height: screenSize.height * 2, // 100% of the screen height
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final screenHeight = constraints.maxHeight;
+            final svgSize = screenWidth < 600 ? screenWidth * 1 : screenWidth * 1;
+
+            return SvgPicture.asset(
+              'assets/Images/splash.svg',
+              width: svgSize,
+              height: svgSize,
+            );
+          },
         ),
       ),
     );
