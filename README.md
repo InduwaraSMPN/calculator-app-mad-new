@@ -1,4 +1,4 @@
-```markdown
+
 # Flutter Project
 
 ## Table of Contents
@@ -13,9 +13,9 @@
 This is a Flutter project designed to [brief description of what your project does]. It is built using the Flutter framework and is compatible with both Android and iOS platforms.
 
 ## Features
-- Feature 1
-- Feature 2
-- Feature 3
+- Supports basic arithmetic operations
+- Allows entering numbers using a numeric keypad.
+- Includes clear (C), backspace (⌫), decimal point (.), and sign toggle (+/-).
 
 ## Installation
 
@@ -27,15 +27,15 @@ Before you begin, ensure you have met the following requirements:
 
 ### Steps
 1. **Clone the repository:**
-   ```sh
+   ```bash
    git clone https://github.com/your-username/your-repo-name.git
    ```
 2. **Navigate to the project directory:**
-   ```sh
+   ```bash
    cd your-repo-name
    ```
 3. **Install dependencies:**
-   ```sh
+   ```bash
    flutter pub get
    ```
 
@@ -44,14 +44,14 @@ Before you begin, ensure you have met the following requirements:
 ### On an Emulator
 1. **Start your emulator** (Android Studio or any other emulator you have set up).
 2. **Run the project:**
-   ```sh
+   ```bash
    flutter run
    ```
 
 ### On a Physical Device
 1. **Connect your device** via USB and ensure USB debugging is enabled.
 2. **Run the project:**
-   ```sh
+   ```bash
    flutter run
    ```
 
@@ -66,6 +66,3 @@ Contributions are always welcome! Please follow these steps to contribute:
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
-
-Replace placeholders like `your-username`, `your-repo-name`, and `[brief description of what your project does]` with your actual project details.
