@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final screenWidth = constraints.maxWidth;
-            final imageSize = screenWidth < 600 ? screenWidth * 1 : screenWidth * 1;
+            final imageSize = screenWidth < 600 ? screenWidth * 1.6 : screenWidth * 1.6; // Adjusted for zoom
 
             return Image.asset(
               'assets/Images/splash-mobile.png',
