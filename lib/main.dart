@@ -21,7 +21,6 @@ class CalculatorApp extends StatelessWidget {
     );
   }
 }
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -47,13 +46,26 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            // Get the screen dimensions
+            final screenHeight = constraints.maxHeight;
             final screenWidth = constraints.maxWidth;
-            final svgSize = screenWidth < 600 ? screenWidth * 1 : screenWidth * 1;
 
-            return SvgPicture.asset(
-              'assets/Images/splash.svg',
-              width: svgSize,
-              height: svgSize,
+            // Calculate the appropriate size based on both width and height
+            // Use the smaller of the two dimensions to ensure the image fits
+            // Multiplied by 1.6 to make it approximately 2x larger than before
+            final size = screenHeight < screenWidth
+                ? screenHeight * 1.6  // If height is smaller, use 160% of height
+                : screenWidth * 1.6;  // If width is smaller, use 160% of width
+
+            return Center(
+              child: SizedBox(
+                height: size,
+                width: size,
+                child: SvgPicture.asset(
+                  'assets/Images/splash.svg',
+                  fit: BoxFit.contain,  // This ensures the image maintains its aspect ratio
+                ),
+              ),
             );
           },
         ),
@@ -70,7 +82,6 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-
   // Colors for buttons
   static const Color numberButtonColor = Color(0xFFeff0f6); // 0-9 , . , ⌫ , % . +/-
   static const Color operatorButtonColor = Color(0xffe7f6ff); // + , - , x , /
@@ -224,10 +235,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   Widget _buildButton(
-    String text, {
-    Color backgroundColor = numberButtonColor,
-    Color textColor = textColor,
-  }) {
+      String text, {
+        Color backgroundColor = numberButtonColor,
+        Color textColor = textColor,
+      }) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
