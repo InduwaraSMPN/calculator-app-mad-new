@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:expressions/expressions.dart';
-import 'package:device_preview/device_preview.dart';
 
 void main() {
-  runApp(
-    DevicePreview(
-      builder: (context) => CalculatorApp(),
-    ),
-  );
+  runApp(CalculatorApp());
 }
 
 class CalculatorApp extends StatelessWidget {
@@ -37,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const CalculatorScreen()),
       );
@@ -159,9 +154,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       final parsedExpression = Expression.parse(exp);
       final evaluator = const ExpressionEvaluator();
       final result = evaluator.eval(parsedExpression, {});
-      if (result == double.infinity || result == double.negativeInfinity) {
-        throw Exception('Division by zero');
+
+      // Check if the result is NaN or infinite
+      if (result.isNaN || result == double.infinity || result == double.negativeInfinity) {
+        throw Exception('Invalid expression');
       }
+
       return result % 1 == 0 ? result.toInt().toString() : result.toString();
     } catch (e) {
       throw Exception('Invalid expression');
