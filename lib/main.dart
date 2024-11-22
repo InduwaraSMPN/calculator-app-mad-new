@@ -83,7 +83,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   static const Color acTextColor = Color(0xFF792b53); // AC
   static const Color backspaceTextColor = Color(0xFFf52c58); //for ⌫
   static const Color errorColor = Color(0xFFf52c58); // Error
-  static const Color resultColor = Color(0xFFbaeaa0); // Result
+  static const Color resultColor = Color(0xFF4c98d5); // Result
 
   String _output = '';
   String _operationSequence = '';
