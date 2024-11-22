@@ -21,6 +21,7 @@ class CalculatorApp extends StatelessWidget {
     );
   }
 }
+//start
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -52,18 +53,22 @@ class _SplashScreenState extends State<SplashScreen> {
 
             // Calculate the appropriate size based on both width and height
             // Use the smaller of the two dimensions to ensure the image fits
-            // Multiplied by 1.6 to make it approximately 2x larger than before
+            // Multiplied by 2.0 to make it approximately 2x larger than before
             final size = screenHeight < screenWidth
-                ? screenHeight * 1.6  // If height is smaller, use 160% of height
-                : screenWidth * 1.6;  // If width is smaller, use 160% of width
+                ? screenHeight * 2.0  // If height is smaller, use 200% of height
+                : screenWidth * 2.0;  // If width is smaller, use 200% of width
 
-            return Center(
-              child: SizedBox(
-                height: size,
-                width: size,
-                child: SvgPicture.asset(
-                  'assets/Images/splash.svg',
-                  fit: BoxFit.contain,  // This ensures the image maintains its aspect ratio
+            // Use AspectRatio to ensure the splash screen scales correctly
+            return AspectRatio(
+              aspectRatio: 1.0, // Adjust this value as needed
+              child: Center(
+                child: SizedBox(
+                  height: size,
+                  width: size,
+                  child: SvgPicture.asset(
+                    'assets/Images/splash.svg',
+                    fit: BoxFit.contain,  // This ensures the image maintains its aspect ratio
+                  ),
                 ),
               ),
             );
@@ -73,6 +78,8 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+//end
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
