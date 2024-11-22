@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 import 'package:expressions/expressions.dart';
 
@@ -21,7 +20,7 @@ class CalculatorApp extends StatelessWidget {
     );
   }
 }
-//start
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -47,30 +46,13 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Get the screen dimensions
-            final screenHeight = constraints.maxHeight;
             final screenWidth = constraints.maxWidth;
+            final imageSize = screenWidth < 600 ? screenWidth * 1 : screenWidth * 1;
 
-            // Calculate the appropriate size based on both width and height
-            // Use the smaller of the two dimensions to ensure the image fits
-            // Multiplied by 2.0 to make it approximately 2x larger than before
-            final size = screenHeight < screenWidth
-                ? screenHeight * 2.0  // If height is smaller, use 200% of height
-                : screenWidth * 2.0;  // If width is smaller, use 200% of width
-
-            // Use AspectRatio to ensure the splash screen scales correctly
-            return AspectRatio(
-              aspectRatio: 1.0, // Adjust this value as needed
-              child: Center(
-                child: SizedBox(
-                  height: size,
-                  width: size,
-                  child: SvgPicture.asset(
-                    'assets/Images/splash.svg',
-                    fit: BoxFit.contain,  // This ensures the image maintains its aspect ratio
-                  ),
-                ),
-              ),
+            return Image.asset(
+              'assets/Images/splash-mobile.png',
+              width: imageSize,
+              height: imageSize,
             );
           },
         ),
@@ -78,8 +60,6 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-//end
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -89,6 +69,7 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
+
   // Colors for buttons
   static const Color numberButtonColor = Color(0xFFeff0f6); // 0-9 , . , ⌫ , % . +/-
   static const Color operatorButtonColor = Color(0xffe7f6ff); // + , - , x , /
@@ -319,8 +300,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     top: MediaQuery.of(context).size.height * 0.03,
                     bottom: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  child: SvgPicture.asset(
-                    'assets/Images/logo.svg',  // Replace with your SVG path
+                  child: Image.asset(
+                    'assets/Images/logo.png',  // Replace with your PNG path
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
                 ),
