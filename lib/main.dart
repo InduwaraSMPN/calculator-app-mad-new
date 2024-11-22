@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:expressions/expressions.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
-  runApp(const CalculatorApp());
+  runApp(
+    DevicePreview(
+      builder: (context) => CalculatorApp(),
+    ),
+  );
 }
 
 class CalculatorApp extends StatelessWidget {
