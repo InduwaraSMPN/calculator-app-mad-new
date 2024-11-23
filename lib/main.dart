@@ -115,6 +115,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       } else {
         _operationSequence += number;
       }
+      // Limit decimal places to 10
+      if (_operationSequence.contains('.')) {
+        final parts = _operationSequence.split('.');
+        if (parts[1].length > 10) {
+          _operationSequence = '${parts[0]}.${parts[1].substring(0, 10)}';
+        }
+      }
       _output = _operationSequence;
     });
   }
@@ -144,7 +151,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     });
   }
 
-  // Handler for equals button press
+// Handler for equals button press
   void _onEqualsPressed() {
     setState(() {
       // Ignore if there's an error or no operation sequence
@@ -159,13 +166,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         _isResultDisplayed = true;
       } catch (e) {
         // Display error if calculation fails
-        _output = 'Error';
+        _output = e.toString().replaceFirst('Exception: ', ''); // Remove "Exception: " prefix
         _hasError = true;
       }
     });
   }
 
-  // Method to safely evaluate mathematical expressions
+// Method to safely evaluate mathematical expressions
   String _evaluateExpression(String expression) {
     try {
       // Replace calculator symbols with standard math symbols
@@ -174,15 +181,20 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       final evaluator = const ExpressionEvaluator();
       final result = evaluator.eval(parsedExpression, {});
 
-      // Check for invalid mathematical results
+      // Check for division by zero
       if (result.isNaN || result == double.infinity || result == double.negativeInfinity) {
-        throw Exception('Invalid expression');
+        throw 'Can\'t divide by zero'; // Throw exact error message
       }
 
       // Return integer if whole number, otherwise return decimal
       return result % 1 == 0 ? result.toInt().toString() : result.toString();
     } catch (e) {
-      throw Exception('Invalid expression');
+      // Catch other errors and throw a generic "Invalid calculation" message
+      if (e.toString() == 'Can\'t divide by zero') {
+        rethrow;
+      } else {
+        throw 'Invalid calculation'; // Throw exact error message
+      }
     }
   }
 
