@@ -1,3 +1,4 @@
+//IM-2021-088 Induwra SMPN
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:expressions/expressions.dart';
@@ -190,7 +191,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       return result % 1 == 0 ? result.toInt().toString() : result.toString();
     } catch (e) {
       // Catch other errors and throw a generic "Invalid calculation" message
-      if (e.toString() == 'Can\'t divide by zero') {
+      if (e.toString() == 'Can\'t divide by 0') {
         rethrow;
       } else {
         throw 'Invalid calculation'; // Throw exact error message
